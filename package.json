@@ -4,11 +4,11 @@
   "description": "First attempt at creating a BattleSnake in Node js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "PORT=5000 nodemon -c 'node index.js'"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kristyngirard/battlesnake-starter.git"
+    "url": "https://github.com/kristyngirard/battlesnake-starter"
   },
   "author": "Kristyn Girard",
   "license": "MIT",
@@ -17,6 +17,11 @@
   },
   "homepage": "https://github.com/kristyngirard/battlesnake-starter#readme",
   "dependencies": {
-    "express": "^4.16.2"
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.15.1"
   }
 }
