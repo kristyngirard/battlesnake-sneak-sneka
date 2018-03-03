@@ -16,13 +16,6 @@ This client uses [Express4](http://expressjs.com/en/4x/api.html) for easy route 
 
 ## Running the AI locally
 
-Fork and clone this repo:
-
-```shell
-git clone git@github.com:sendwithus/battlesnake-node.git
-cd battlesnake-node
-```
-
 Install the client dependencies:
 
 ```shell
