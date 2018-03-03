@@ -55,25 +55,24 @@ app.post('/move', (req, res) => {
     var left = snakeHead.x -1
     var right = snakeHead.x +1
     
-    
     function isOccupied(direction, snakeHead, allSnakes) {
         
         var x = 0
         var y = 0
         
-        if (direction = "up") {
+        if (direction === "up") {
             y = snakeHead.y-1
             x = snakeHead.x
         }
-        else if (direction = "down"){
+        else if (direction === "down"){
             y = snakeHead.y+1
             x = snakeHead.x
         }
-        else if (direction = "left"){
+        else if (direction === "left"){
             y = snakeHead.y
             x = snakeHead.x-1
         }
-        else if(direction = "right"){
+        else if(direction === "right"){
             y = snakeHead.y
             x = snakeHead.x+1
         }
@@ -139,49 +138,106 @@ app.post('/move', (req, res) => {
     //if on same x
   if (snakeHead.x - food.x === 0) {
       
-    if (snakeHead.y - food.y > 0 && notDirection !== "up" && wallud !== "up" ) {
-      move = "up"
-    } else if (notDirection !== "down" && wallud !== "down" ) {
-      move = "down"
-    }
-    else {
-        if (snakeHead.x - food.x > 0 && notDirection !== "left" && walllr !== "left" ) {
-          move = "left"
+    if (snakeHead.y - food.y > 0 && wallud !== "up" ) {
+        
+        console.log("Try first up")
+        
+        if (!(isOccupied("up", snakeHead, allSnakes))) {
+            move = "up"
+        } else if (!(isOccupied("right", snakeHead, allSnakes)) && wallud !== "right") {
+            move = "right"
         } else {
-          move = "right"
+            move = "left"
+        }
+    } else if (wallud !== "down") {
+        
+        console.log("Try first down")
+        
+        if (!(isOccupied("down", snakeHead, allSnakes))) {
+            move = "down"
+        } else if (!(isOccupied("right", snakeHead, allSnakes)) && wallud !== "right") {
+            move = "right"
+        } else {
+            move = "left"
         }
     }
     //else if same on y  
   } else if (snakeHead.y - food.y === 0) {
-    if (snakeHead.x - food.x > 0 && notDirection !== "left" && walllr !== "left" ) {
-      move = "left"
-    } else if (notDirection !=="right" && walllr !== "right" ) {
-      move = "right"
-    }
-      else{
-    if (snakeHead.y - food.y > 0 && notDirection !== "up" && wallud !== "up" ) {
-      move = "up"
-    } else {
-      move = "down"
-    }
-      }
+      
+        console.log("first left")
+      
+        if (snakeHead.x - food.x > 0 && walllr !== "left" ) {
+            if (!(isOccupied("left", snakeHead, allSnakes))) {
+                move = "left"
+            } else if (!(isOccupied("up", snakeHead, allSnakes)) && wallud !== "up") {
+                move = "up"
+            } else {
+                move = "down"
+            }
+        } else if (walllr !== "right" ) {
+            
+            console.log("first right")
+            
+            if (!(isOccupied("right", snakeHead, allSnakes))) {
+                move = "right"
+            } else if (!(isOccupied("up", snakeHead, allSnakes)) && wallud !== "up") {
+                move = "up"
+            } else {
+                move = "down"
+            }
+        }  
   }
     //else anything else
     else {
-    if (snakeHead.x - food.x > 0 && notDirection !== "left" && walllr !== "left" ) {
-      move = "left"
-    } else if (notDirection !=="right" && walllr !== "right" ) {
-      move = "right"
+        if (snakeHead.x - food.x > 0 && walllr !== "left" ) { 
+            
+            console.log("else left")
+            
+            if (!(isOccupied("left", snakeHead, allSnakes))) {
+                move = "left"
+            } else if (!(isOccupied("up", snakeHead, allSnakes)) && wallud !== "up") {
+                move = "up"
+            } else {
+                move = "down"
+            }
+        } else if (walllr !== "right" ) {
+            
+            console.log("else right")
+            
+            if (!(isOccupied("right", snakeHead, allSnakes))) {
+                move = "right"
+            } else if (!(isOccupied("up", snakeHead, allSnakes)) && wallud !== "up") {
+                move = "up"
+            } else {
+                move = "down"
+            }
+        } else{
+            if (snakeHead.y - food.y > 0 && wallud !== "up" ) {
+                
+                console.log("else up")
+                
+                if (!(isOccupied("up", snakeHead, allSnakes))) {
+                    move = "up"
+                } else if (!(isOccupied("right", snakeHead, allSnakes)) && wallud !== "right") {
+                    move = "right"
+                } else {
+                    move = "left"
+                }
+            } else {
+                
+                console.log("else down")
+                
+                if (!(isOccupied("down", snakeHead, allSnakes))) {
+                    move = "down"
+                } else if (!(isOccupied("right", snakeHead, allSnakes)) && wallud !== "right") {
+                    move = "right"
+                } else {
+                    move = "left"
+                }
+            }
+        }
     }
-      else{
-    if (snakeHead.y - food.y > 0 && notDirection !== "up" && wallud !== "up" ) {
-      move = "up"
-    } else {
-      move = "down"
-    }
-      }
-  }
-
+    
     console.log("snek move ", move)
      
   //Return
