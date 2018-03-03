@@ -23,13 +23,13 @@ app.use(poweredByHandler)
 app.post('/start', (req, res) => {
   // Response data
   const data = {
-    color: "#FFFF00",
-    name: "battlesnaKA",
-    head_url: "https://vignette.wikia.nocookie.net/harrypotter/images/d/d3/0.61_Slytherin_Crest_Transparent.png/revision/latest?cb=20161020182557",
+    color: "#169056",
+    name: "sneak-sneka",
+    head_url: "https://ih0.redbubble.net/image.280444667.5089/flat,800x800,075,f.jpg",
     taunt: "slytherin to a win",
     head_type: "fang",
     tail_type: "regular",
-    secondary_color: "#FFFF00"
+    secondary_color: "#C4D000"
   }
 
   return res.json(data)
