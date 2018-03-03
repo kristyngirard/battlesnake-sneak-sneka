@@ -55,7 +55,7 @@ app.post('/move', (req, res) => {
     var left = snakeHead.x -1
     var right = snakeHead.x +1
     
-    function isOccupied(direction, snakeHead, allSnakes) {
+    function isOccupied(direction, snakeHead, snakeTail, allSnakes) {
         
         var x = 0
         var y = 0
@@ -83,6 +83,10 @@ app.post('/move', (req, res) => {
             if (allSnakes[i].health > 0) {
                 for(let j = 0; j < allSnakes[i].body.data.length; j++) {
                     if (allSnakes[i].body.data[j].x === x && allSnakes[i].body.data[j].y === y) {
+                        if (x === snakeTail.x && y === snakeTail.y){
+                            console.log("TAIL")
+                            return false;
+                        }
                         console.log("me, sneks x ", x, "y ", y)
                         return true;
                     }
@@ -91,26 +95,7 @@ app.post('/move', (req, res) => {
         }
         
         return false;
-    }
-    
-//    //check for itself collision
-    var notDirection
-    
-    if (up === snakePrevStep.y) {
-        notDirection = "up"
-    }
-    else if (down === snakePrevStep.y) {
-        notDirection = "down"
-    }
-    else if (left === snakePrevStep.x) {
-        notDirection = "left"
-    }
-    else {
-        notDirection = "right"
-    }
-    
-    console.log("snake notDirection ", notDirection)
-//    
+    }  
     
     //check for walls
     //gameState.Width, snakeHead
@@ -142,9 +127,9 @@ app.post('/move', (req, res) => {
         
         console.log("Try first up")
         
-        if (!(isOccupied("up", snakeHead, allSnakes))) {
+        if (!(isOccupied("up", snakeHead, snakeTail, allSnakes))) {
             move = "up"
-        } else if (!(isOccupied("right", snakeHead, allSnakes)) && wallud !== "right") {
+        } else if (!(isOccupied("right", snakeHead, snakeTail, allSnakes)) && walllr !== "right") {
             move = "right"
         } else {
             move = "left"
@@ -153,9 +138,9 @@ app.post('/move', (req, res) => {
         
         console.log("Try first down")
         
-        if (!(isOccupied("down", snakeHead, allSnakes))) {
+        if (!(isOccupied("down", snakeHead, snakeTail, allSnakes))) {
             move = "down"
-        } else if (!(isOccupied("right", snakeHead, allSnakes)) && wallud !== "right") {
+        } else if (!(isOccupied("right", snakeHead, snakeTail, allSnakes)) && walllr !== "right") {
             move = "right"
         } else {
             move = "left"
@@ -167,9 +152,9 @@ app.post('/move', (req, res) => {
         console.log("first left")
       
         if (snakeHead.x - food.x > 0 && walllr !== "left" ) {
-            if (!(isOccupied("left", snakeHead, allSnakes))) {
+            if (!(isOccupied("left", snakeHead, snakeTail, allSnakes))) {
                 move = "left"
-            } else if (!(isOccupied("up", snakeHead, allSnakes)) && wallud !== "up") {
+            } else if (!(isOccupied("up", snakeHead, snakeTail, allSnakes)) && wallud !== "up") {
                 move = "up"
             } else {
                 move = "down"
@@ -178,9 +163,9 @@ app.post('/move', (req, res) => {
             
             console.log("first right")
             
-            if (!(isOccupied("right", snakeHead, allSnakes))) {
+            if (!(isOccupied("right", snakeHead, snakeTail, allSnakes))) {
                 move = "right"
-            } else if (!(isOccupied("up", snakeHead, allSnakes)) && wallud !== "up") {
+            } else if (!(isOccupied("up", snakeHead, snakeTail, allSnakes)) && wallud !== "up") {
                 move = "up"
             } else {
                 move = "down"
@@ -193,32 +178,72 @@ app.post('/move', (req, res) => {
             
             console.log("else left")
             
-            if (!(isOccupied("left", snakeHead, allSnakes))) {
+            if (!(isOccupied("left", snakeHead, snakeTail, allSnakes))) {
                 move = "left"
-            } else if (!(isOccupied("up", snakeHead, allSnakes)) && wallud !== "up") {
-                move = "up"
+            } else if (!(isOccupied("up", snakeHead, snakeTail, allSnakes)) && wallud !== "up") {
+                if (snakeHead.y - food.y > 0) {
+                    move = "up"
+                }
+                else if (!(isOccupied("down", snakeHead, snakeTail, allSnakes)) && wallud !== "down"){
+                    move = "down"
+                }
+                else if (!(isOccupied("right", snakeHead, snakeTail, allSnakes)) && walllr !== "right"){
+                    move = "right"
+                }
+                else {
+                    move = "up"
+                }
             } else {
-                move = "down"
+                if (!(isOccupied("down", snakeHead, snakeTail, allSnakes)) && wallud !== "down"){
+                    move = "down"
+                }
+                else if (!(isOccupied("right", snakeHead, snakeTail, allSnakes)) && walllr !== "right"){
+                    move = "right"
+                }
+                else {
+                    move = "up"
+                    console.log("kill else left")
+                }
             }
         } else if (walllr !== "right" ) {
             
             console.log("else right")
             
-            if (!(isOccupied("right", snakeHead, allSnakes))) {
+            if (!(isOccupied("right", snakeHead, snakeTail, allSnakes))) {
                 move = "right"
-            } else if (!(isOccupied("up", snakeHead, allSnakes)) && wallud !== "up") {
-                move = "up"
+            } else if (!(isOccupied("up", snakeHead, snakeTail, allSnakes)) && wallud !== "up") {
+                if (snakeHead.y - food.y > 0) {
+                    move = "up"
+                }
+                else if (!(isOccupied("down", snakeHead, snakeTail, allSnakes)) && wallud !== "down"){
+                    move = "down"
+                }
+                else if (!(isOccupied("left", snakeHead, snakeTail, allSnakes)) && walllr !== "left"){
+                    move = "left"
+                }
+                else {
+                    move = "up"
+                }
             } else {
-                move = "down"
+                if (!(isOccupied("down", snakeHead, snakeTail, allSnakes)) && wallud !== "down"){
+                    move = "down"
+                }
+                else if (!(isOccupied("left", snakeHead, snakeTail, allSnakes)) && walllr !== "left"){
+                    move = "left"
+                }
+                else {
+                    move = "up"
+                    console.log("kill else right")
+                }
             }
         } else{
             if (snakeHead.y - food.y > 0 && wallud !== "up" ) {
                 
                 console.log("else up")
                 
-                if (!(isOccupied("up", snakeHead, allSnakes))) {
+                if (!(isOccupied("up", snakeHead, snakeTail, allSnakes))) {
                     move = "up"
-                } else if (!(isOccupied("right", snakeHead, allSnakes)) && wallud !== "right") {
+                } else if (!(isOccupied("right", snakeHead, snakeTail, allSnakes)) && walllr !== "right" && snakeHead.x - food.x < 0 ) {
                     move = "right"
                 } else {
                     move = "left"
@@ -227,9 +252,9 @@ app.post('/move', (req, res) => {
                 
                 console.log("else down")
                 
-                if (!(isOccupied("down", snakeHead, allSnakes))) {
+                if (!(isOccupied("down", snakeHead, snakeTail, allSnakes))) {
                     move = "down"
-                } else if (!(isOccupied("right", snakeHead, allSnakes)) && wallud !== "right") {
+                } else if (!(isOccupied("right", snakeHead, snakeTail, allSnakes)) && walllr !== "right" && snakeHead.x - food.x < 0) {
                     move = "right"
                 } else {
                     move = "left"
