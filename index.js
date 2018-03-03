@@ -23,13 +23,13 @@ app.use(poweredByHandler)
 app.post('/start', (req, res) => {
   // Response data
   const data = {
-    color: "#2C753C",
+    color: "#FFFF00",
     name: "battlesnaKA",
     head_url: "https://vignette.wikia.nocookie.net/harrypotter/images/d/d3/0.61_Slytherin_Crest_Transparent.png/revision/latest?cb=20161020182557",
     taunt: "slytherin to a win",
     head_type: "fang",
     tail_type: "regular",
-    secondary_color: "#2C753C"
+    secondary_color: "#FFFF00"
   }
 
   return res.json(data)
@@ -37,23 +37,106 @@ app.post('/start', (req, res) => {
 
 // POST '/move' response
 app.post('/move', (req, res) => {
-  /**** TODO: figure out how to generate next move ***/
+  const gameState = req.body
+  const mySnake = gameState.you
 
-  /*
-    things to consider:
-    - can't go in the direction it came from
-    - can't go in a direction if its body is there
-    - can't go off the board
-  */
-  // Just set moves randomly for now
-  const moves = ["up", "down", "left", "right"]
+  const snakeHead = mySnake.body.data[0]
+  const snakeTail = mySnake.body.data[mySnake.length - 1]
+  const snakePrevStep = mySnake.body.data[1]
+  const food = gameState.food.data[0]
 
-  const data = {
-    move: moves[Math.floor(Math.random() * 4)],
-    taunt: 'outta my wayyy'
+  console.log("snake head ", snakeHead)
+  console.log("snake tail ", snakeTail)
+  console.log("snake prevStep ", snakePrevStep)
+
+    var up = snakeHead.y -1
+    var down = snakeHead.y +1
+    var left = snakeHead.x -1
+    var right = snakeHead.x +1
+    
+    
+    //check for itself collision
+    var notDirection
+    
+    if (up === snakePrevStep.y) {
+        notDirection = "up"
+    }
+    else if (down === snakePrevStep.y) {
+        notDirection = "down"
+    }
+    else if (left === snakePrevStep.x) {
+        notDirection = "left"
+    }
+    else {
+        notDirection = "right"
+    }
+    
+    console.log("snake notDirection ", notDirection)
+    
+    
+    //check for walls
+    //gameState.Width, snakeHead
+    var wallud = ""
+    var walllr = ""
+    
+    console.log("height ", gameState.height)
+    console.log("width ", gameState.width)
+    
+    if (up < 0) {
+        wallud = "up"
+    }
+    else if (down > gameState.height - 1) {
+        wallud = "down"
+    }
+    
+    if (left < 0) {
+        walllr = "left"
+    }
+    else if (right > gameState.width - 1) {
+        walllr = "right"
+    }    
+    
+    console.log("snake wall ud ", wallud)
+    console.log("snake wall lr ", walllr)
+    
+    //determine next move
+  if (snakeHead.x - food.x === 0) {
+      
+    if (snakeHead.y - food.y > 0 && notDirection !== "up" && wallud !== "up" ) {
+      move = "up"
+    } else if (notDirection !== "down" && wallud !== "down" ) {
+      move = "down"
+    }
+    else {
+    if (snakeHead.x - food.x > 0 && notDirection !== "left" && walllr !== "left" ) {
+      move = "left"
+    } else {
+      move = "right"
+    }
+    }
+      
+  } else {
+    if (snakeHead.x - food.x > 0 && notDirection !== "left" && walllr !== "left" ) {
+      move = "left"
+    } else if (notDirection !=="right" && walllr !== "right" ) {
+      move = "right"
+    }
+      else{
+    if (snakeHead.y - food.y > 0 && notDirection !== "up" && wallud !== "up" ) {
+      move = "up"
+    } else {
+      move = "down"
+    }
+      }
   }
 
-  return res.json(data)
+    console.log("snek move ", move)
+     
+  //Return
+  res.json({ 
+    'move': move,
+    "taunt": "Hi"
+  })
 })
 
 app.use('*', fallbackHandler)
