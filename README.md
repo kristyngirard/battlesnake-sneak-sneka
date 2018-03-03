@@ -2,8 +2,6 @@
 
 Beginner Division Snake for Battlesnake 2018 competition by Andrey Safonov and Kristyn Girard.
 
-# battlesnake-node(js)
-
 A simple [BattleSnake AI](https://battlesnake.io) written in Javascript for NodeJS.
 
 To get started you'll need a working NodeJS development environment, and at least read the Heroku docs on [deploying a NodeJS app](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
@@ -15,13 +13,6 @@ This client uses [Express4](http://expressjs.com/en/4x/api.html) for easy route 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 ## Running the AI locally
-
-Fork and clone this repo:
-
-```shell
-git clone git@github.com:sendwithus/battlesnake-node.git
-cd battlesnake-node
-```
 
 Install the client dependencies:
 
