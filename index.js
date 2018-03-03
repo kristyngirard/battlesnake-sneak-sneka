@@ -132,7 +132,13 @@ app.post('/move', (req, res) => {
         } else if (!(isOccupied("right", snakeHead, snakeTail, allSnakes)) && walllr !== "right") {
             move = "right"
         } else {
-            move = "left"
+                if (!(isOccupied("left", snakeHead, snakeTail, allSnakes)) && walllr !== "left") {
+                    move = "left"
+                }
+                else {
+                    console.log("Kill Try first up")
+                    move = "down"
+                }
         }
     } else if (wallud !== "down") {
         
@@ -143,7 +149,13 @@ app.post('/move', (req, res) => {
         } else if (!(isOccupied("right", snakeHead, snakeTail, allSnakes)) && walllr !== "right") {
             move = "right"
         } else {
-            move = "left"
+                if (!(isOccupied("left", snakeHead, snakeTail, allSnakes)) && walllr !== "left") {
+                    move = "left"
+                }
+                else {
+                    console.log("Kill Try first down")
+                    move = "up"
+                }
         }
     }
     //else if same on y  
@@ -157,7 +169,13 @@ app.post('/move', (req, res) => {
             } else if (!(isOccupied("up", snakeHead, snakeTail, allSnakes)) && wallud !== "up") {
                 move = "up"
             } else {
-                move = "down"
+                if (!(isOccupied("down", snakeHead, snakeTail, allSnakes)) && wallud !== "down") {
+                    move = "down"
+                }
+                else {
+                    console.log("Kill first left")
+                    move = "right"
+                }
             }
         } else if (walllr !== "right" ) {
             
@@ -168,7 +186,13 @@ app.post('/move', (req, res) => {
             } else if (!(isOccupied("up", snakeHead, snakeTail, allSnakes)) && wallud !== "up") {
                 move = "up"
             } else {
-                move = "down"
+                if (!(isOccupied("down", snakeHead, snakeTail, allSnakes)) && wallud !== "down") {
+                    move = "down"
+                }
+                else {
+                    console.log("Kill first right")
+                    move = "left"
+                }
             }
         }  
   }
