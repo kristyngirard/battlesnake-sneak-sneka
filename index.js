@@ -44,18 +44,57 @@ app.post('/move', (req, res) => {
   const snakeTail = mySnake.body.data[mySnake.length - 1]
   const snakePrevStep = mySnake.body.data[1]
   const food = gameState.food.data[0]
+  
+  const allSnakes = gameState.snakes.data
 
   console.log("snake head ", snakeHead)
-  console.log("snake tail ", snakeTail)
   console.log("snake prevStep ", snakePrevStep)
-
+  
     var up = snakeHead.y -1
     var down = snakeHead.y +1
     var left = snakeHead.x -1
     var right = snakeHead.x +1
     
     
-    //check for itself collision
+    function isOccupied(direction, snakeHead, allSnakes) {
+        
+        var x = 0
+        var y = 0
+        
+        if (direction = "up") {
+            y = snakeHead.y-1
+            x = snakeHead.x
+        }
+        else if (direction = "down"){
+            y = snakeHead.y+1
+            x = snakeHead.x
+        }
+        else if (direction = "left"){
+            y = snakeHead.y
+            x = snakeHead.x-1
+        }
+        else if(direction = "right"){
+            y = snakeHead.y
+            x = snakeHead.x+1
+        }
+        
+        console.log("move direction ", direction, " x ", x, " y ", y)
+        
+        for(let i = 0; i < allSnakes.length; i++){
+            if (allSnakes[i].health > 0) {
+                for(let j = 0; j < allSnakes[i].body.data.length; j++) {
+                    if (allSnakes[i].body.data[j].x === x && allSnakes[i].body.data[j].y === y) {
+                        console.log("me, sneks x ", x, "y ", y)
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+//    //check for itself collision
     var notDirection
     
     if (up === snakePrevStep.y) {
@@ -72,15 +111,12 @@ app.post('/move', (req, res) => {
     }
     
     console.log("snake notDirection ", notDirection)
-    
+//    
     
     //check for walls
     //gameState.Width, snakeHead
     var wallud = ""
     var walllr = ""
-    
-    console.log("height ", gameState.height)
-    console.log("width ", gameState.width)
     
     if (up < 0) {
         wallud = "up"
@@ -99,7 +135,8 @@ app.post('/move', (req, res) => {
     console.log("snake wall ud ", wallud)
     console.log("snake wall lr ", walllr)
     
-    //determine next move
+  //determine next move
+    //if on same x
   if (snakeHead.x - food.x === 0) {
       
     if (snakeHead.y - food.y > 0 && notDirection !== "up" && wallud !== "up" ) {
@@ -108,14 +145,29 @@ app.post('/move', (req, res) => {
       move = "down"
     }
     else {
+        if (snakeHead.x - food.x > 0 && notDirection !== "left" && walllr !== "left" ) {
+          move = "left"
+        } else {
+          move = "right"
+        }
+    }
+    //else if same on y  
+  } else if (snakeHead.y - food.y === 0) {
     if (snakeHead.x - food.x > 0 && notDirection !== "left" && walllr !== "left" ) {
       move = "left"
-    } else {
+    } else if (notDirection !=="right" && walllr !== "right" ) {
       move = "right"
     }
+      else{
+    if (snakeHead.y - food.y > 0 && notDirection !== "up" && wallud !== "up" ) {
+      move = "up"
+    } else {
+      move = "down"
     }
-      
-  } else {
+      }
+  }
+    //else anything else
+    else {
     if (snakeHead.x - food.x > 0 && notDirection !== "left" && walllr !== "left" ) {
       move = "left"
     } else if (notDirection !=="right" && walllr !== "right" ) {
@@ -135,7 +187,7 @@ app.post('/move', (req, res) => {
   //Return
   res.json({ 
     'move': move,
-    "taunt": "Hi"
+    "taunt": "heck"
   })
 })
 
